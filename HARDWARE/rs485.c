@@ -6,6 +6,25 @@ volatile uint8_t  receiveValue[20];
 volatile uint8_t  receiveFlag=0;
 volatile uint8_t  receiveCounter=0;
 
+///**
+//  * @brief  
+//  * @param
+//  * @retval 
+//  */
+//void USART1_IRQHandler(void)
+//{
+//	uint8_t res;	    
+//	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//接收到数据
+//	{
+//	  res =USART_ReceiveData(USART1);
+//		receiveValue[receiveCounter++] = res;
+//		if(receiveCounter>=gr_cmd_handle.rec_len_bycmd)
+//		{
+//			receiveCounter = 0;
+//			receiveFlag = 1;
+//		}
+//	}					 
+//}
 /**
   * @brief  
   * @param
@@ -17,13 +36,10 @@ void USART1_IRQHandler(void)
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//接收到数据
 	{
 	  res =USART_ReceiveData(USART1);
-		receiveValue[receiveCounter++] = res;
-		if(receiveCounter>=gr_cmd_handle.rec_len_bycmd)
-		{
-			receiveCounter = 0;
-			receiveFlag = 1;
-		}
-	}					 
+		USART_ClearFlag(USART2,USART_FLAG_TC);
+//		while(USART_GetFlagStatus(USART2,USART_FLAG_TC)==RESET); 	
+		USART_SendData(USART2, (unsigned char) res);		
+	}
 }
 /**
   * @brief  rs485 初始化函数
@@ -82,7 +98,7 @@ void RS485_Init(uint32_t bound)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
 
-	 RS485_RX_EN;				//默认为接收模式	
+	RS485_RX_EN;				//默认为接收模式	
 }
 
 

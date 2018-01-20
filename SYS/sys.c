@@ -5,7 +5,10 @@ volatile uint32_t led_tx_delay = 0xffffffff;
 volatile uint32_t led_rx_delay = 0xffffffff;
 volatile uint32_t can_hb_delay = 0xffffffff;
 volatile uint32_t gas_read_dalay = 0xffffffff;
-
+volatile u8 send485[10];
+volatile u8 sendflag=0;
+volatile u8 sendindex=0;
+volatile u8 senlennn;
 /**
   * @brief  
   * @param  None

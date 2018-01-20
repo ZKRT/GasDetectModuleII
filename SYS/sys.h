@@ -22,4 +22,8 @@ extern volatile uint32_t led_tx_delay;
 extern volatile uint32_t led_rx_delay;
 extern volatile uint32_t can_hb_delay;
 extern volatile uint32_t gas_read_dalay;
+extern volatile u8 send485[10];
+extern volatile u8 sendflag;
+extern volatile u8 sendindex;
+extern volatile u8 senlennn;
 #endif
