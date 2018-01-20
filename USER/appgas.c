@@ -69,10 +69,14 @@ void appcan_prcs(void)
 static void can_hb_handle(void)
 {
 	int i;
+	float value;
+	u32 value2;
+	uint16_t devidev;	
 	zkrt_packet_t *packet = (zkrt_packet_t*)can_send_data;
 	common_data_plst *comn_data = (common_data_plst*)packet->data;
 	common_hbd_plst *comnhb = (common_hbd_plst*)comn_data->type_data;
 	hb_gas_st *hbgas = (hb_gas_st*)comnhb->hb_data;	
+	
 	if(can_hb_delay -TimingDelay <1000)
 		return;
 	can_hb_delay = TimingDelay;
@@ -92,14 +96,13 @@ static void can_hb_handle(void)
 	hbgas->ch_status = gr_dev_info.status;
 	for(i=0; i<hbgas->ch_num; i++)
 	{
-		float value;
-		uint16_t devidev;
 		if(gr_ch_info[i].decimal ==0)
 			devidev = 1;
 		else
 			devidev = (gr_ch_info[i].decimal)*10;
 		value = (float)(gr_ch_info[i].gasvalue)/devidev;
-		memcpy(&hbgas->gas_value[i], &value, 4);		
+		memcpy(&value2, &value, 4);
+		hbgas->gas_value[i] = value2;
 	}
 	packet->length = THHB_FIXED_LEN+sizeof(hb_gas_st);
 	can_send_len = zkrt_final_encode(can_send_data, packet);
