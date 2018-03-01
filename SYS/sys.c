@@ -121,3 +121,13 @@ void SysTick_Handler(void)
 //  }  
 //}
 
+float u32tof(unsigned int a)
+{
+	float b=*(float*)&a;
+	return b;
+}
+unsigned int ftou32(float a)
+{
+	unsigned int b=*(unsigned int*)&a;
+	return b;
+}

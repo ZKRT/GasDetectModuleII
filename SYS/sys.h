@@ -22,4 +22,7 @@ extern volatile uint32_t led_tx_delay;
 extern volatile uint32_t led_rx_delay;
 extern volatile uint32_t can_hb_delay;
 extern volatile uint32_t gas_read_dalay;
+
+float u32tof(unsigned int a);
+unsigned int ftou32(float a);
 #endif

@@ -124,6 +124,7 @@ static void can_recv_handle(void)
 		case ZK_COMMAND_COMMON:
 			break;		
 		case ZK_COMMAND_SPECIFIED:
+			memset(can_send_data, 0x00, sizeof(can_send_data));
 			if(appgas_spec_message_handle(&recv_handle.packet, can_send_data, &can_send_len)==NEED_RETRUN)
 			{
 				CAN1_send_message_fun(can_send_data, can_send_len);
@@ -180,7 +181,7 @@ static u8 appgas_spec_message_handle(zkrt_packet_t* recvpack, u8* respond_data, 
 		memcpy(resheader, recvpack, sizeof(zkrtpacket_header));
 		resheader->cmd = UAV_TO_APP;
 		resheader->length = respacket_len;
-		restailer = (zkrtpacket_tailer*)(rcomspec+respacket_len);
+		restailer = (zkrtpacket_tailer*)(respond_data+sizeof(zkrtpacket_header)+respacket_len);
 		restailer->end_code = _END_CODE;
 		restailer->crc = crc_calculate(respond_data, respacket_len+ZK_HEADER_LEN);
 		*reslen = respacket_len+ZK_FIXED_LEN;
@@ -242,6 +243,8 @@ static char getchnum_gasptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 //
 static char getchinfo_gasptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 {
+	float value;
+  uint16_t devidev;
 	u8 res = S_Success_Gas;
 	send_comspec_plst *s = (send_comspec_plst*)sdata;
 	respond_comspec_plst *r = (respond_comspec_plst*)rdata;
@@ -258,19 +261,19 @@ static char getchinfo_gasptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 	{
 		if(sother->ch <gr_dev_info.ch_num)
 		{
-			float value;
-		  uint16_t devidev;
       if(gr_ch_info[sother->ch].decimal ==0)
 				devidev = 1;
 			else
 				devidev = (gr_ch_info[sother->ch].decimal)*10;
 			value = (float)(gr_ch_info[sother->ch].gasvalue)/devidev;
-			memcpy(&rother->value, &value, 4);
+//			memcpy(&rother->value, &value, 4);
+			rother->value = ftou32(value);
 			rother->ch = sother->ch;
 			rother->sensor_type = manu_gastype2zkrt(0, gr_ch_info[sother->ch].type);
 			rother->unit_type = manu_gasunittype2zkrt(0, gr_ch_info[sother->ch].unit);
 			value = (float)gr_ch_info[sother->ch].range;
-			memcpy(&rother->range, &value, 4);
+//			memcpy(&rother->range, &value, 4);
+			rother->range = ftou32(value);
 		}
 		else
 			res = S_FailNoChannel_Gas; 
