@@ -13,9 +13,9 @@ typedef uint8_t  u8;
 
 void RCC_Configuration(void);
 void SysTick_Init(void);
-void delay_us(uint16_t nus);				
-void delay_ms(uint16_t nms);	
-void delay_xms(uint16_t nms);	
+void delay_us(uint16_t nus);
+void delay_ms(uint16_t nms);
+void delay_xms(uint16_t nms);
 
 extern volatile uint32_t TimingDelay;
 extern volatile uint32_t led_tx_delay;

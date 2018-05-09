@@ -77,7 +77,7 @@
 //data index
 #define ZK_DINDEX_DEVTYPE           3
 
-//编号定义，用于UAVID[2：1]和UAVID[5：4]  
+//编号定义，用于UAVID[2：1]和UAVID[5：4]
 #define DEFAULT_NUM 0X00
 #define SECOND_NUM  0X01
 
@@ -90,26 +90,23 @@
 
 //packet max num
 #pragma pack(push, 1)
-typedef struct 
-{
-	uint8_t start_code; 		      
-	uint8_t ver;		   						 
-	uint8_t session_ack;	          
-	uint8_t padding_enc;            
-	uint8_t cmd;             		  
-	uint8_t length;    //length -- [data length]       		
-	uint8_t seq;               		
-	uint8_t APPID[3];      			   
-	uint8_t UAVID[6];        			
+typedef struct {
+	uint8_t start_code;
+	uint8_t ver;
+	uint8_t session_ack;
+	uint8_t padding_enc;
+	uint8_t cmd;
+	uint8_t length;    //length -- [data length]
+	uint8_t seq;
+	uint8_t APPID[3];
+	uint8_t UAVID[6];
 	uint8_t command;
-}zkrtpacket_header;
-typedef struct
-{
-	uint16_t crc;      //[Start Code~Data[n]]        		
-	uint8_t end_code; 
-}zkrtpacket_tailer;
-typedef struct _zkrt_packet_t
-{
+} zkrtpacket_header;
+typedef struct {
+	uint16_t crc;      //[Start Code~Data[n]]
+	uint8_t end_code;
+} zkrtpacket_tailer;
+typedef struct _zkrt_packet_t {
 	uint8_t start_code; 		        //字节0，帧起始码，0XEB
 	uint8_t ver;		   						  //字节1，协议版本
 	uint8_t session_ack;	          //字节2，会话ID，0无需应答，1有应答；帧标识：0数据帧，1命令帧
@@ -123,20 +120,25 @@ typedef struct _zkrt_packet_t
 	uint8_t data[ZK_DATA_MAX_LEN];  //字节
 	uint16_t crc;              			//字节17+len，CRC校验码
 	uint8_t end_code;          			//字节19+len，帧结束
-}zkrt_packet_t;
+} zkrt_packet_t;
 
 #pragma pack(pop)
 
 //get zkrt packet in can buffer relevant handle struct
-typedef struct
-{
+typedef struct {
 	uint8_t recv_ok;       //1-receive complete, 0-receive not complete
 	uint8_t curser_state;  //handle index state
 	uint8_t app_index;
 	uint8_t uav_index;
-	uint8_t dat_index;	
-	zkrt_packet_t packet;  //receive packet 
-}recv_zkrt_packet_handlest;
+	uint8_t dat_index;
+	zkrt_packet_t packet;  //receive packet
+} recv_zkrt_packet_handlest;
+
+typedef struct {
+	zkrt_packet_t packet;
+	u8 data[ZK_MAX_LEN];
+	u8 datalen;
+} msg_handle_st;
 
 void crc_accumulate(uint8_t data, uint16_t *crcAccum);
 void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t length);
