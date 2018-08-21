@@ -23,7 +23,7 @@
 //version and model string //zkrt_notice
 #define DEV_MODEL              "M-GD"
 #define DEV_HW                 "000101"
-#define DEV_SW                 "000101"
+#define DEV_SW                 "000102"
 
 /* Exported constants --------------------------------------------------------*/
 //////////////////////////////////////////////////////special define

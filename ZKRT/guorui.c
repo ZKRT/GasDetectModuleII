@@ -19,6 +19,8 @@
 #include "guorui.h"
 #include "poison.h"
 
+#define READ_DELAY  300  //ms 
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 gr_ch_infost gr_ch_info[MAX_CHANNEL_GAS];
@@ -40,7 +42,7 @@ void guorui_init(void) {
 
 	//read ch number and config ch map
 	for (i = GR_ADDR_START_NUM; i <= MAX_CHANNEL_GAS; i++) {
-		delay_ms(100);
+		delay_ms(READ_DELAY);
 		if (ReadModel(i, &tempshort) == true) {
 			gr_ch_info[gr_dev_info.ch_num].addr = i;
 			gr_ch_info[gr_dev_info.ch_num].model = tempshort;
@@ -49,25 +51,25 @@ void guorui_init(void) {
 	}
 	//read all valid channel number info like range, decimal so on and so forth, except gas value
 	for (i = 0; i < gr_dev_info.ch_num; i++) { //read type
-		delay_ms(100);
+		delay_ms(READ_DELAY);
 		if (ReadType(gr_ch_info[i].addr, &tempchar) == true) {
 			gr_ch_info[i].type = tempchar;
 		}
 	}
 	for (i = 0; i < gr_dev_info.ch_num; i++) { //read range
-		delay_ms(100);
+		delay_ms(READ_DELAY);
 		if (ReadMeaRange(gr_ch_info[i].addr, &tempshort) == true) {
 			gr_ch_info[i].range = tempshort;
 		}
 	}
 	for (i = 0; i < gr_dev_info.ch_num; i++) { //read unit
-		delay_ms(100);
+		delay_ms(READ_DELAY);
 		if (ReadUint(gr_ch_info[i].addr, &tempchar) == true) {
 			gr_ch_info[i].unit = tempchar;
 		}
 	}
 	for (i = 0; i < gr_dev_info.ch_num; i++) { //read decimal
-		delay_ms(100);
+		delay_ms(READ_DELAY);
 		if (ReadDecimal(gr_ch_info[i].addr, &tempchar) == true) {
 			gr_ch_info[i].decimal = tempchar;
 		}
